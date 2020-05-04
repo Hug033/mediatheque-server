@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import static server.Helpers.SQLHelper.authenticate;
@@ -31,7 +32,6 @@ public class ClientProcessor implements Runnable{
 
             try {
                 //Ici, nous n'utilisons pas les mêmes objets que précédemment
-                writer = new PrintWriter(sock.getOutputStream());
                 reader = new BufferedInputStream(sock.getInputStream());
 
                 //On attend la demande du client
@@ -50,28 +50,28 @@ public class ClientProcessor implements Runnable{
                 System.err.println("\n" + debug);
 
                 //On traite la demande du client en fonction de la commande envoyée
-                String toSend = "";
+                OutputStream outputStream = sock.getOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                List<String> toSend = new ArrayList<>();
 
                 switch(responses.get(0).toUpperCase()){
                     case "AUTH":
-                        toSend = authenticate(responses.get(1), responses.get(2));
+                        toSend.add(authenticate(responses.get(1), responses.get(2)));
                         break;
                     case "LIST":
-                        toSend = "NO DATA";
+                        toSend.add("NO_DATA");
                         //toSend = authenticate(responses.get(1), responses.get(2));
                         break;
                     default :
-                        toSend = "UNKNOWN_COMMAND";
+                        toSend.add("UNKNOWN_COMMAND");
                         break;
                 }
 
-                //On envoie la réponse au client
-                writer.write(toSend);
-                writer.flush();
+                objectOutputStream.writeObject(toSend);
+                objectOutputStream.flush();
 
                 if(closeConnexion){
                     System.err.println("Fermeture de la connexion");
-                    writer = null;
                     reader = null;
                     sock.close();
                     break;

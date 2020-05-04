@@ -19,5 +19,6 @@ public class Main implements AutoCloseable {
     @Override
     public void close() throws Exception {
         conn.close();
+        System.out.println("Disconnected to the PostgreSQL server successfully");
     }
 }
