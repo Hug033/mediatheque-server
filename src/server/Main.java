@@ -1,15 +1,28 @@
 package server;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
+import server.Helpers.SQLHelper;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class Main  {
 
+    private static Connection conn;
 
     public static void main(String[] args) {
-        SQLController.connect();
+        try {
+            conn = SQLHelper.connect(); // Connexion à la base de données
+
+            TimeServer ts = new TimeServer("127.0.0.1", 2345, conn);
+            ts.open(); // Lancement du serveur
+
+            conn.close();
+        } catch (SQLException e) {
+            try {
+                throw e;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
     }
 }

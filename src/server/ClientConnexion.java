@@ -1,10 +1,10 @@
 package server;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ClientConnexion implements Runnable{
@@ -14,7 +14,7 @@ public class ClientConnexion implements Runnable{
     private BufferedInputStream reader = null;
 
     //Notre liste de commandes. Le serveur nous répondra différemment selon la commande utilisée.
-    private String[] listCommands = {"FULL", "DATE", "HOUR", "NONE"};
+    private String[] listCommands = {"COUCOU", "NONE"};
     private static int count = 0;
     private String name = "Client-";
 
@@ -42,16 +42,19 @@ public class ClientConnexion implements Runnable{
             try {
 
 
-                writer = new PrintWriter(connexion.getOutputStream(), true);
+                OutputStream outputStream = connexion.getOutputStream();
                 reader = new BufferedInputStream(connexion.getInputStream());
                 //On envoie la commande au serveur
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-                String commande = getCommand();
-                writer.write(commande);
-                //TOUJOURS UTILISER flush() POUR ENVOYER RÉELLEMENT DES INFOS AU SERVEUR
-                writer.flush();
-
-                System.out.println("Commande " + commande + " envoyée au serveur");
+                // Liste des messages a envoyer
+                List<String> messages = new ArrayList<>();
+                messages.add("auth");
+                messages.add("login");
+                messages.add("test");
+                messages.add("fsdf54s9");
+                objectOutputStream.writeObject(messages);
+                objectOutputStream.flush();
 
                 //On attend la réponse
                 String response = read();
@@ -67,10 +70,6 @@ public class ClientConnexion implements Runnable{
                 e.printStackTrace();
             }
         }
-
-        writer.write("CLOSE");
-        writer.flush();
-        writer.close();
     }
 
     //Méthode qui permet d'envoyer des commandeS de façon aléatoire

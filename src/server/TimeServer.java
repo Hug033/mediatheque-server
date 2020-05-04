@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Connection;
 
 public class TimeServer {
 
@@ -13,6 +14,7 @@ public class TimeServer {
     private String host = "127.0.0.1";
     private ServerSocket server = null;
     private boolean isRunning = true;
+    private Connection conn;
 
     public TimeServer(){
         try {
@@ -24,9 +26,10 @@ public class TimeServer {
         }
     }
 
-    public TimeServer(String pHost, int pPort){
+    public TimeServer(String pHost, int pPort, Connection conn){
         host = pHost;
         port = pPort;
+        this.conn = conn;
         try {
             server = new ServerSocket(port, 100, InetAddress.getByName(host));
         } catch (UnknownHostException e) {
@@ -36,24 +39,22 @@ public class TimeServer {
         }
     }
 
-
-    //On lance notre serveur
+    // On lance notre serveur
     public void open(){
 
-        //Toujours dans un thread à part vu qu'il est dans une boucle infinie
+        // Toujours dans un thread à part vu qu'il est dans une boucle infinie
         Thread t = new Thread(new Runnable(){
             public void run(){
                 while(isRunning == true){
 
                     try {
-                        //On attend une connexion d'un client
+                        // On attend une connexion d'un client
                         Socket client = server.accept();
 
                         //Une fois reçue, on la traite dans un thread séparé
                         System.out.println("Connexion cliente reçue.");
-                        Thread t = new Thread(new ClientProcessor(client));
+                        Thread t = new Thread(new ClientProcessor(client, conn));
                         t.start();
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

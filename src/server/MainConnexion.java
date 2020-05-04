@@ -1,5 +1,7 @@
 package server;
 
+import server.Helpers.SQLHelper;
+
 public class MainConnexion {
 
     public static void main(String[] args) {
@@ -7,7 +9,7 @@ public class MainConnexion {
         String host = "127.0.0.1";
         int port = 2345;
 
-        TimeServer ts = new TimeServer(host, port);
+        TimeServer ts = new TimeServer(host, port, SQLHelper.connect());
         ts.open();
 
         System.out.println("Serveur initialisé.");
