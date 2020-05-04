@@ -1,17 +1,11 @@
 package server.Helpers;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.TreeSet;
 
-/**
- * Classe qui contient des outils de sérialization
- *
- */
-class SerializationHelpers {
+public class SerializationHelpers {
 
     // Permet de sérialiser un Serializable
-    static byte[] serialize(Serializable o) throws IOException {
+    public static byte[] serialize(Serializable o) throws IOException {
         if (o != null) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -22,8 +16,8 @@ class SerializationHelpers {
         	throw new NullPointerException();
     }
 
-    // Pert de désérialiser et retourne un Serializable
-    static Serializable deserialize(byte[] data) throws IOException, ClassNotFoundException {
+    // Pertmet de désérialiser et retourne un Serializable
+    public static Serializable deserialize(byte[] data) throws IOException, ClassNotFoundException {
         if (data != null) {
             ByteArrayInputStream ba = new ByteArrayInputStream(data);
             ObjectInputStream obj = new ObjectInputStream(ba);
