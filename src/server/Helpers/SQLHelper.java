@@ -3,9 +3,11 @@ package server.Helpers;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.List;
 
 public class SQLHelper {
     private static final String url = "jdbc:postgresql://localhost/bd_mediatheque";
@@ -27,33 +29,49 @@ public class SQLHelper {
     }
 
     // Permet d'authentifier un utilisateur et retourne un token
-    public static String authenticate(String login, String password) {
+    public static List<String> authenticate(String login, String password) {
         PreparedStatement requete = null;
         ResultSet resultat = null;
+        List<String> responses = new ArrayList<String>();
+
         try {
             requete = conn.prepareStatement("SELECT * FROM users WHERE  login = ? AND password = ?");
             requete.setString(1, login);
             requete.setString(2, password);
             resultat = requete.executeQuery();
 
-            if(resultat.next())
-            {
+            if (resultat.next()) {
                 String token = generateToken();
                 LocalDate date = LocalDate.now();
+                String userState = resultat.getString("state");
+                System.out.println(userState);
+                responses.add("OK");
 
-                requete = conn.prepareStatement("INSERT INTO token(id_user, token, validate) values (?, ?, ?)");
-                requete.setInt(1, Integer.parseInt(resultat.getString("person_id"))); // 1 correspond au 1er point d'interrogation
-                requete.setString(2, token); // 2 correspond au 2ème point d'interrogation
-                requete.setString(3, date.plusDays(3).toString()); // 3 correspond au 3ème point d'interrogation
-                requete.executeUpdate();
+                if (userState != null && userState != "0") {
+                    requete = conn.prepareStatement("INSERT INTO token(id_user, token, validate) values (?, ?, ?)");
+                    requete.setInt(1, Integer.parseInt(resultat.getString("person_id"))); // 1 correspond au 1er point d'interrogation
+                    requete.setString(2, token); // 2 correspond au 2ème point d'interrogation
+                    requete.setString(3, date.plusDays(3).toString()); // 3 correspond au 3ème point d'interrogation
+                    requete.executeUpdate();
+                    responses.add(token);
+                } else
+                    responses.add("--");
 
-                return token;
+                responses.add(userState);
+
+                return responses;
             }
         } catch (SQLException e) {
             e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
             System.err.println("Erreur lors de l'authentification du client");
         }
-        return "auth_fail";
+
+        responses.clear();
+        responses.add("AUTH_FAIL");
+        responses.add("--");
+        responses.add("--");
+
+        return responses;
     }
 
     // Permet de vérifier si un token est valide
@@ -66,7 +84,7 @@ public class SQLHelper {
             requete.setString(2, LocalDateTime.now().toString());
             resultat = requete.executeQuery();
 
-            if(resultat.next())
+            if (resultat.next())
                 return true;
         } catch (SQLException e) {
             e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)

@@ -16,7 +16,7 @@ public class TimeServer {
     private boolean isRunning = true;
     private Connection conn;
 
-    public TimeServer(){
+    public TimeServer() {
         try {
             server = new ServerSocket(port, 100, InetAddress.getByName(host));
         } catch (UnknownHostException e) {
@@ -26,7 +26,7 @@ public class TimeServer {
         }
     }
 
-    public TimeServer(String pHost, int pPort, Connection conn){
+    public TimeServer(String pHost, int pPort, Connection conn) {
         host = pHost;
         port = pPort;
         this.conn = conn;
@@ -40,12 +40,12 @@ public class TimeServer {
     }
 
     // On lance notre serveur
-    public void open(){
+    public void open() {
 
         // Toujours dans un thread à part vu qu'il est dans une boucle infinie
-        Thread t = new Thread(new Runnable(){
-            public void run(){
-                while(isRunning == true){
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                while (isRunning == true) {
 
                     try {
                         // On attend une connexion d'un client
@@ -72,7 +72,7 @@ public class TimeServer {
         t.start();
     }
 
-    public void close(){
+    public void close() {
         isRunning = false;
     }
 }
