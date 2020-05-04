@@ -9,16 +9,16 @@ INSERT INTO person (firstname, lastname, birthday) VALUES ('Smith', 'James', '19
 INSERT INTO person (firstname, lastname, birthday) VALUES ('Smith', 'Sophia', '1980-09-01');
 INSERT INTO person (firstname, lastname, birthday) VALUES ('Smith', 'Oliver', '1980-10-01');
 
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user0', 'pwd0', '06*********', '2020-01-01', 0);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user1', 'pwd1', '06*********', '2020-01-01', 0);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user2', 'pwd2', '06*********', '2020-01-01', 1);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user3', 'pwd3', '06*********', '2020-01-01', 1);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user4', 'pwd4', '06*********', '2020-01-01', 2);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user5', 'pwd5', '06*********', '2020-01-01', 2);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user6', 'pwd6', '06*********', '2020-01-01', 3);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user7', 'pwd7', '06*********', '2020-01-01', 3);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user8', 'pwd9', '06*********', '2020-01-01', 4);
-INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user9', 'pwd9', '06*********', '2020-01-01', 4);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user0@login.com', 'pwd0', '06*********', '2020-01-01', 0);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user1@login.com', 'pwd1', '06*********', '2020-01-01', 0);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user2@login.com', 'pwd2', '06*********', '2020-01-01', 1);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user3@login.com', 'pwd3', '06*********', '2020-01-01', 1);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user4@login.com', 'pwd4', '06*********', '2020-01-01', 2);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user5@login.com', 'pwd5', '06*********', '2020-01-01', 2);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user6@login.com', 'pwd6', '06*********', '2020-01-01', 3);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user7@login.com', 'pwd7', '06*********', '2020-01-01', 3);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user8@login.com', 'pwd9', '06*********', '2020-01-01', 4);
+INSERT INTO users (profile, login, password, phone, registration, state) VALUES ('010010001110001', 'user9@login.com', 'pwd9', '06*********', '2020-01-01', 4);
 
 INSERT INTO category (label) VALUES ('book');
 INSERT INTO category (label) VALUES ('dvd');
