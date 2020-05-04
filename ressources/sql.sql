@@ -98,10 +98,15 @@ create table token (
 );
 
 GRANT ALL PRIVILEGES ON person TO user_media;
+GRANT ALL PRIVILEGES ON person_id_seq TO user_media;
 GRANT ALL PRIVILEGES ON users TO user_media;
 GRANT ALL PRIVILEGES ON media TO user_media;
 GRANT ALL PRIVILEGES ON category TO user_media;
+GRANT ALL PRIVILEGES ON category_id_seq TO user_media;
+GRANT ALL PRIVILEGES ON theme TO user_media;
+GRANT ALL PRIVILEGES ON theme_id_seq TO user_media;
 GRANT ALL PRIVILEGES ON borrowing TO user_media;
+GRANT ALL PRIVILEGES ON borrowing_id_seq TO user_media;
 GRANT ALL PRIVILEGES ON book TO user_media;
 GRANT ALL PRIVILEGES ON dvd TO user_media;
 GRANT ALL PRIVILEGES ON cd TO user_media;
