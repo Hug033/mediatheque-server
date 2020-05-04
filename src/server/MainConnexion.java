@@ -1,4 +1,5 @@
-package sample;
+package server;
+
 public class MainConnexion {
 
     public static void main(String[] args) {
