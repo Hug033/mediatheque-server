@@ -74,6 +74,37 @@ public class SQLHelper {
         return responses;
     }
 
+    // Permte de faire une requete sur une liste de manière générique
+    public static List<String> genericList(List<String> filters) {
+        PreparedStatement requete = null;
+        ResultSet resultat = null;
+        List<String> responses = new ArrayList<String>();
+
+        try {
+            String req = "";
+            requete = conn.prepareStatement(req);
+            for(int i = 0; i < filters.size(); i++) {
+                req += " AND WHERE category.label = ?";
+                requete.setString(i - 1, filters.get(i));
+            }
+            resultat = requete.executeQuery();
+
+            while (resultat.next()) {
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
+            System.err.println("Erreur lors de l'authentification du client");
+        }
+
+        responses.clear();
+        responses.add("AUTH_FAIL");
+        responses.add("--");
+        responses.add("--");
+
+        return responses;
+    }
+
     // Permet de vérifier si un token est valide
     public boolean checkToken(String token) {
         PreparedStatement requete = null;

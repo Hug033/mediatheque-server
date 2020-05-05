@@ -51,7 +51,7 @@ public class ClientProcessor implements Runnable {
                 //On traite la demande du client en fonction de la commande envoyée
                 OutputStream outputStream = sock.getOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                List<String> toSend = new ArrayList<>();
+                List<Serializable> toSend = new ArrayList<>();
 
                 switch (responses.get(0).toUpperCase()) {
                     case "AUTH":
