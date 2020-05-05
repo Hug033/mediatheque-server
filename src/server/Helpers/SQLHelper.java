@@ -1,13 +1,16 @@
 package server.Helpers;
 
+import server.Media;
+
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import com.google.gson.*;
 
 public class SQLHelper {
     private static final String url = "jdbc:postgresql://localhost/bd_mediatheque";
@@ -75,34 +78,40 @@ public class SQLHelper {
     }
 
     // Permte de faire une requete sur une liste de manière générique
-    public static List<String> genericList(List<String> filters) {
+    public static String genericList(String type) {
         PreparedStatement requete = null;
         ResultSet resultat = null;
-        List<String> responses = new ArrayList<String>();
 
         try {
             String req = "";
+            System.out.println(type);
+            if(type.equals("DVD"))
+                req = "SELECT * FROM media INNER JOIN theme ON media.theme = theme.id INNER JOIN dvd ON media.ref = dvd.media_ref INNER JOIN person ON dvd.director = person.id;";
+            else if(type.equals("CD"))
+                req = "SELECT * FROM media INNER JOIN theme ON media.theme = theme.id INNER JOIN cd ON media.ref = cd.media_ref INNER JOIN person ON cd.composer = person.id";
+            else
+                req = "SELECT * FROM media INNER JOIN theme ON media.theme = theme.id INNER JOIN book ON media.ref = book.media_ref INNER JOIN person ON book.author = person.id";
+
             requete = conn.prepareStatement(req);
-            for(int i = 0; i < filters.size(); i++) {
-                req += " AND WHERE category.label = ?";
-                requete.setString(i - 1, filters.get(i));
-            }
             resultat = requete.executeQuery();
-
+            List<Media> allMedia = new ArrayList<Media>();
             while (resultat.next()) {
-
+                Media m = new Media(new byte[5],
+                        resultat.getString("ref"),
+                        resultat.getString("title"),
+                        resultat.getString("firstname"),
+                        resultat.getString("description"),
+                        Integer.parseInt(resultat.getString("score")),
+                        Integer.parseInt(resultat.getString("nb_rate"))
+                );
+                allMedia.add(m);
             }
+            return new Gson().toJson(allMedia);
         } catch (SQLException e) {
             e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
             System.err.println("Erreur lors de l'authentification du client");
         }
-
-        responses.clear();
-        responses.add("AUTH_FAIL");
-        responses.add("--");
-        responses.add("--");
-
-        return responses;
+        return "";
     }
 
     // Permet de vérifier si un token est valide

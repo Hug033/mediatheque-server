@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static server.Helpers.SQLHelper.authenticate;
+import static server.Helpers.SQLHelper.genericList;
 
 public class ClientProcessor implements Runnable {
 
@@ -38,6 +39,7 @@ public class ClientProcessor implements Runnable {
                 InputStream inputStream = sock.getInputStream();
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                 List<String> responses = (List<String>) objectInputStream.readObject();
+                System.out.println(responses);
                 InetSocketAddress remote = (InetSocketAddress) sock.getRemoteSocketAddress();
 
                 //On affiche quelques infos, pour le débuggage
@@ -61,8 +63,8 @@ public class ClientProcessor implements Runnable {
                         toSend.add(auth.get(2));
                         break;
                     case "LIST":
-                        toSend.add("NO_DATA");
-                        //toSend = authenticate(responses.get(1), responses.get(2));
+                        System.out.println(responses.get(1));
+                        toSend.add(genericList(responses.get(1)));
                         break;
                     default:
                         toSend.add("UNKNOWN_COMMAND");
@@ -71,6 +73,7 @@ public class ClientProcessor implements Runnable {
 
                 objectOutputStream.writeObject(toSend);
                 objectOutputStream.flush();
+                objectOutputStream.close();
 
                 if (closeConnexion) {
                     System.err.println("Fermeture de la connexion");
