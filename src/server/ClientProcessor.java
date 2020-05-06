@@ -73,6 +73,9 @@ public class ClientProcessor implements Runnable {
                     case "CHANGE_STATUS":
                         toSend.add(changeStatus(responses.get(1), responses.get(2)));
                         break;
+                    case "ADD_RESERVE":
+                        toSend.add(addReserve(responses.get(1), responses.get(2), responses.get(3)));
+                        break;
                     case "ADD_USER":
                         toSend.add(addUser(responses.get(1)
                                 , responses.get(2)

@@ -54,8 +54,8 @@ create table media (
 
 create table borrowing  (
     id serial not null,
-    startDate date not null,
-    endDate date not null,
+    startDate varchar not null,
+    endDate varchar not null,
     condition int not null,
     borrower_id int not null,
     media_ref varchar not null,

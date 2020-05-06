@@ -147,6 +147,28 @@ public class SQLHelper {
         return "";
     }
 
+    // Permte de faire une requete sur une liste de manière générique
+    public static String addReserve(String dateDeb, String dateFin, String ref) {
+        PreparedStatement requete = null;
+        ResultSet resultat;
+
+        try {
+            requete = conn.prepareStatement("INSERT INTO borrowing (startDate, endDate, condition, borrower_id, media_ref) VALUES (?, ?, ?, ?, ?)");
+            requete.setString(1, dateDeb);
+            requete.setString(2, dateFin);
+            requete.setInt(3, 1);
+            requete.setInt(4, 1);
+            requete.setString(5, ref);
+            requete.executeUpdate();
+
+            return "OK";
+        } catch (SQLException e) {
+            e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
+            System.err.println("Erreur lors de l'authentification du client");
+        }
+        return "";
+    }
+
     public static String changePassword(String user, String hash) {
         PreparedStatement requete = null;
         int resultat;
