@@ -86,7 +86,7 @@ public class SQLHelper {
             String req = "";
             System.out.println(type);
             if(type.equals("DVD"))
-                req = "SELECT * FROM media INNER JOIN theme ON media.theme = theme.id INNER JOIN dvd ON media.ref = dvd.media_ref INNER JOIN person ON dvd.director = person.id;";
+                req = "SELECT * FROM media INNER JOIN theme ON media.theme = theme.id INNER JOIN dvd ON media.ref = dvd.media_ref INNER JOIN person ON dvd.director = person.id";
             else if(type.equals("CD"))
                 req = "SELECT * FROM media INNER JOIN theme ON media.theme = theme.id INNER JOIN cd ON media.ref = cd.media_ref INNER JOIN person ON cd.composer = person.id";
             else
@@ -96,13 +96,23 @@ public class SQLHelper {
             resultat = requete.executeQuery();
             List<Media> allMedia = new ArrayList<Media>();
             while (resultat.next()) {
+                PreparedStatement requete2 = conn.prepareStatement("SELECT * FROM borrowing WHERE media_ref = ? ORDER BY id");
+                requete2.setString(1, resultat.getString("ref"));
+
+                ResultSet resultat2 = requete2.executeQuery();
+                int condition = 0;
+                if(resultat2.next()) {
+                    condition = Integer.parseInt(resultat2.getString("condition"));
+                }
+
                 Media m = new Media(new byte[5],
                         resultat.getString("ref"),
                         resultat.getString("title"),
                         resultat.getString("firstname"),
                         resultat.getString("description"),
                         Integer.parseInt(resultat.getString("score")),
-                        Integer.parseInt(resultat.getString("nb_rate"))
+                        Integer.parseInt(resultat.getString("nb_rate")),
+                        condition
                 );
                 allMedia.add(m);
             }

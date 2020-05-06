@@ -43,3 +43,5 @@ INSERT INTO dvd (media_ref, director, duration, minAge) VALUES ('20000001', 7, 1
 
 INSERT INTO cd (media_ref, composer, track) VALUES ('30000000', 9, 9);
 INSERT INTO cd (media_ref, composer, track) VALUES ('30000001', 9, 9);
+
+INSERT INTO borrowing (startDate, endDate, condition, borrower_id, media_ref) VALUES ('1980-10-01', '1980-10-05', '2', '1', '1');

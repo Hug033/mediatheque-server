@@ -12,8 +12,9 @@ public class Media implements Serializable {
     private int nbRate;
     private int totalRate;
     private int rate;
+    private int state;
 
-    public Media(byte[] photo, String ref, String title, String author, String description, int nbRate, int totalRate) {
+    public Media(byte[] photo, String ref, String title, String author, String description, int nbRate, int totalRate, int state) {
         this.photo = photo;
         this.ref = ref;
         this.title = title;
@@ -22,6 +23,7 @@ public class Media implements Serializable {
         this.nbRate = nbRate;
         this.totalRate = totalRate;
         this.rate = (int)(totalRate / nbRate);
+        this.state = state;
     }
 
     public byte[] getPhoto() {
@@ -52,4 +54,5 @@ public class Media implements Serializable {
         return rate;
     }
 
+    public int getState() { return state;}
 }
