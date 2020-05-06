@@ -81,6 +81,26 @@ public class SQLHelper {
     }
 
     // Permte de faire une requete sur une liste de manière générique
+    public static List<String> getCategorie(String a) {
+        PreparedStatement requete = null;
+        ResultSet resultat = null;
+
+        try {
+            requete = conn.prepareStatement("SELECT DISTINCT theme, label from media INNER JOIN theme ON media.theme = theme.id WHERE category = ?");
+            requete.setInt(1, Integer.parseInt(a));
+            resultat = requete.executeQuery();
+            List<String> allCategorie = new ArrayList<String>();
+            while (resultat.next())
+                allCategorie.add(resultat.getString("label"));
+            return allCategorie;
+        } catch (SQLException e) {
+            e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
+            System.err.println("Erreur lors de l'authentification du client");
+        }
+        return null;
+    }
+
+    // Permte de faire une requete sur une liste de manière générique
     public static String getUsers() {
         PreparedStatement requete = null;
         ResultSet resultat = null;
