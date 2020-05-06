@@ -13,8 +13,9 @@ public class User implements Serializable {
     private String phone;
     private String registration;
     private int state;
+    private int id;
 
-    public User(byte[] photo, String firstname, String lastname, String birthday, String login, String password, String phone, String registration, int state) {
+    public User (byte[] photo, String firstname, String lastname, String birthday, String login, String password, String phone, String registration, int state, int id) {
         this.photo = photo;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -24,6 +25,7 @@ public class User implements Serializable {
         this.phone = phone;
         this.registration = registration;
         this.state = state;
+        this.id = id;
     }
 
     public byte[] getPhoto() {
@@ -61,4 +63,6 @@ public class User implements Serializable {
     public int getState() {
         return state;
     }
+
+    public int getId() { return id; }
 }

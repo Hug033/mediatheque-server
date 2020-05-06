@@ -67,6 +67,24 @@ public class ClientProcessor implements Runnable {
                     case "USERS":
                         toSend.add(getUsers());
                         break;
+                    case "CHANGE_PASSWORD":
+                        toSend.add(changePassword(responses.get(1), responses.get(2)));
+                        break;
+                    case "CHANGE_STATUS":
+                        toSend.add(changeStatus(responses.get(1), responses.get(2)));
+                        break;
+                    case "ADD_USER":
+                        toSend.add(addUser(responses.get(1)
+                                , responses.get(2)
+                                , responses.get(3)
+                                , responses.get(4)
+                                , responses.get(5)
+                                , responses.get(6)
+                                , responses.get(7)
+                                , responses.get(8)
+
+                        ));
+                        break;
                     default:
                         toSend.add("UNKNOWN_COMMAND");
                         break;

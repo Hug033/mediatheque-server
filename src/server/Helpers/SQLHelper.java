@@ -3,14 +3,17 @@ package server.Helpers;
 import server.Media;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import com.google.gson.*;
+import java.util.Date;
 
 public class SQLHelper {
     private static final String url = "jdbc:postgresql://localhost/bd_mediatheque";
@@ -83,7 +86,7 @@ public class SQLHelper {
         ResultSet resultat = null;
 
         try {
-            requete = conn.prepareStatement("SELECT * FROM users INNER JOIN person ON users.person_id = person.id");
+            requete = conn.prepareStatement("SELECT * FROM users INNER JOIN person ON users.person_id = person.id ORDER BY state");
             resultat = requete.executeQuery();
             List<User> allUsers = new ArrayList<User>();
             while (resultat.next()) {
@@ -95,11 +98,90 @@ public class SQLHelper {
                         resultat.getString("password"),
                         resultat.getString("phone"),
                         resultat.getString("registration"),
-                        Integer.parseInt(resultat.getString("state"))
+                        Integer.parseInt(resultat.getString("state")),
+                        Integer.parseInt(resultat.getString("id"))
                 );
                 allUsers.add(u);
             }
             return new Gson().toJson(allUsers);
+        } catch (SQLException e) {
+            e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
+            System.err.println("Erreur lors de l'authentification du client");
+        }
+        return "";
+    }
+
+    // Permte de faire une requete sur une liste de manière générique
+    public static String addUser(String email, String password, String nom, String prenom, String telephone, String status, String photo, String date) {
+        PreparedStatement requete = null;
+        ResultSet resultat;
+
+        try {
+            requete = conn.prepareStatement("INSERT INTO person (firstname, lastname, birthday) VALUES (?, ?, ?)");
+            requete.setString(1, prenom);
+            requete.setString(2, nom);
+            requete.setString(3, date);
+            requete.executeUpdate();
+
+            PreparedStatement requete2 = conn.prepareStatement("SELECT id FROM person ORDER BY id DESC LIMIT 1");
+            resultat = requete2.executeQuery();
+            resultat.next();
+
+            requete = conn.prepareStatement("INSERT INTO users (person_id, profile, login, password, phone, registration, state) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            byte[] temp =  photo.getBytes(StandardCharsets.UTF_8);
+            requete.setInt(1, Integer.parseInt(resultat.getString("id")));
+            String datetemp = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+            requete.setBytes(2, temp);
+            requete.setString(3, email);
+            requete.setString(4, password);
+            requete.setString(5, telephone);
+            requete.setString(6, datetemp);
+            requete.setInt(7, Integer.parseInt(status));
+            requete.executeUpdate();
+
+            return "OK";
+        } catch (SQLException e) {
+            e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
+            System.err.println("Erreur lors de l'authentification du client");
+        }
+        return "";
+    }
+
+    public static String changePassword(String user, String hash) {
+        PreparedStatement requete = null;
+        int resultat;
+
+        try {
+            requete = conn.prepareStatement("UPDATE users SET password = ? WHERE person_id = ?");
+            requete.setString(1, hash);
+            requete.setInt(2, Integer.parseInt(user));
+            resultat = requete.executeUpdate();
+            System.out.println(resultat);
+            if(resultat > -1)
+                return "OK";
+            else
+                return "ERROR";
+        } catch (SQLException e) {
+            e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
+            System.err.println("Erreur lors de l'authentification du client");
+        }
+        return "";
+    }
+
+    public static String changeStatus(String user, String state) {
+        PreparedStatement requete = null;
+        int resultat;
+
+        try {
+            requete = conn.prepareStatement("UPDATE users SET state = ? WHERE person_id = ?");
+            requete.setInt(1, Integer.parseInt(state));
+            requete.setInt(2, Integer.parseInt(user));
+            resultat = requete.executeUpdate();
+            System.out.println(resultat);
+            if(resultat > -1)
+                return "OK";
+            else
+                return "ERROR";
         } catch (SQLException e) {
             e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
             System.err.println("Erreur lors de l'authentification du client");
