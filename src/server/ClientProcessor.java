@@ -8,8 +8,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import static server.Helpers.SQLHelper.authenticate;
-import static server.Helpers.SQLHelper.genericList;
+import static server.Helpers.SQLHelper.*;
 
 public class ClientProcessor implements Runnable {
 
@@ -63,8 +62,10 @@ public class ClientProcessor implements Runnable {
                         toSend.add(auth.get(2));
                         break;
                     case "LIST":
-                        System.out.println(responses.get(1));
                         toSend.add(genericList(responses.get(1)));
+                        break;
+                    case "USERS":
+                        toSend.add(getUsers());
                         break;
                     default:
                         toSend.add("UNKNOWN_COMMAND");

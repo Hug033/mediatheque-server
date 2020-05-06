@@ -78,6 +78,36 @@ public class SQLHelper {
     }
 
     // Permte de faire une requete sur une liste de manière générique
+    public static String getUsers() {
+        PreparedStatement requete = null;
+        ResultSet resultat = null;
+
+        try {
+            requete = conn.prepareStatement("SELECT * FROM users INNER JOIN person ON users.person_id = person.id");
+            resultat = requete.executeQuery();
+            List<User> allUsers = new ArrayList<User>();
+            while (resultat.next()) {
+                User u = new User(new byte[5],
+                        resultat.getString("firstname"),
+                        resultat.getString("lastname"),
+                        resultat.getString("birthday"),
+                        resultat.getString("login"),
+                        resultat.getString("password"),
+                        resultat.getString("phone"),
+                        resultat.getString("registration"),
+                        Integer.parseInt(resultat.getString("state"))
+                );
+                allUsers.add(u);
+            }
+            return new Gson().toJson(allUsers);
+        } catch (SQLException e) {
+            e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
+            System.err.println("Erreur lors de l'authentification du client");
+        }
+        return "";
+    }
+
+    // Permet de faire une requete sur une liste de manière générique
     public static String genericList(String type) {
         PreparedStatement requete = null;
         ResultSet resultat = null;
