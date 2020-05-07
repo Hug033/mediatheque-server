@@ -210,6 +210,25 @@ public class SQLHelper {
         return "";
     }
 
+    public static String updateBorrow(String borrowId, String state) {
+        PreparedStatement requete = null;
+        int resultat;
+        try {
+            requete = conn.prepareStatement("UPDATE borrowing SET condition = ? WHERE id = ?");
+            requete.setInt(1, Integer.parseInt(state));
+            requete.setInt(2, Integer.parseInt(borrowId));
+            resultat = requete.executeUpdate();
+            if(resultat > -1)
+                return "OK";
+            else
+                return "ERROR";
+        } catch (SQLException e) {
+            e.printStackTrace(); // affichage de la trace du programme (utile pour le débogage)
+            System.err.println("Erreur lors de l'authentification du client");
+        }
+        return "";
+    }
+
     public static String changeStatus(String user, String state) {
         PreparedStatement requete = null;
         int resultat;
@@ -255,8 +274,10 @@ public class SQLHelper {
 
                 ResultSet resultat2 = requete2.executeQuery();
                 int condition = 0;
+                int borrowId = 0;
                 if(resultat2.next()) {
                     condition = Integer.parseInt(resultat2.getString("condition"));
+                    borrowId = Integer.parseInt(resultat2.getString("id"));
                 }
                 String author = resultat.getString("firstname") + "_" + resultat.getString("lastname");
                 Media m = new Media(new byte[5],
@@ -266,7 +287,8 @@ public class SQLHelper {
                         resultat.getString("description"),
                         Integer.parseInt(resultat.getString("score")),
                         Integer.parseInt(resultat.getString("nb_rate")),
-                        condition
+                        condition,
+                        borrowId
                 );
                 allMedia.add(m);
             }

@@ -22,16 +22,13 @@ public class ClientProcessor implements Runnable {
         sock = pSock;
     }
 
-    // Le traitement lancé dans un thread séparé
     public void run() {
         System.out.println("Lancement du traitement de la connexion cliente");
 
         boolean closeConnexion = false;
-        // Tant que la connexion est active, on traite les demandes
         while (!sock.isClosed()) {
 
             try {
-                //Ici, nous n'utilisons pas les mêmes objets que précédemment
                 reader = new BufferedInputStream(sock.getInputStream());
 
                 //On attend la demande du client
@@ -76,6 +73,9 @@ public class ClientProcessor implements Runnable {
                     case "GET_CATEGORIE":
                         toSend.add((Serializable) getCategorie(responses.get(1)));
                         break;
+                    case "CHANGE_BORROW":
+                        toSend.add((updateBorrow(responses.get(1), responses.get(2))));
+                        break;
                     case "ADD_RESERVE":
                         toSend.add(addReserve(responses.get(1), responses.get(2), responses.get(3)));
                         break;
@@ -88,7 +88,6 @@ public class ClientProcessor implements Runnable {
                                 , responses.get(6)
                                 , responses.get(7)
                                 , responses.get(8)
-
                         ));
                         break;
                     default:

@@ -39,10 +39,8 @@ public class TimeServer {
         }
     }
 
-    // On lance notre serveur
     public void open() {
 
-        // Toujours dans un thread à part vu qu'il est dans une boucle infinie
         Thread t = new Thread(new Runnable() {
             public void run() {
                 while (isRunning == true) {
@@ -51,7 +49,6 @@ public class TimeServer {
                         // On attend une connexion d'un client
                         Socket client = server.accept();
 
-                        //Une fois reçue, on la traite dans un thread séparé
                         System.out.println("Connexion cliente reçue.");
                         Thread t = new Thread(new ClientProcessor(client, conn));
                         t.start();
