@@ -49,7 +49,6 @@ public class TimeServer {
                         // On attend une connexion d'un client
                         Socket client = server.accept();
 
-                        System.out.println("Connexion cliente reçue.");
                         Thread t = new Thread(new ClientProcessor(client, conn));
                         t.start();
                     } catch (IOException e) {
