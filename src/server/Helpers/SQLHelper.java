@@ -258,11 +258,11 @@ public class SQLHelper {
                 if(resultat2.next()) {
                     condition = Integer.parseInt(resultat2.getString("condition"));
                 }
-
+                String author = resultat.getString("firstname") + "_" + resultat.getString("lastname");
                 Media m = new Media(new byte[5],
                         resultat.getString("ref"),
                         resultat.getString("title"),
-                        resultat.getString("firstname"),
+                        author,
                         resultat.getString("description"),
                         Integer.parseInt(resultat.getString("score")),
                         Integer.parseInt(resultat.getString("nb_rate")),
